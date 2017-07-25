@@ -98,7 +98,38 @@ class BaseTableABC(metaclass=ABCMeta):
         return ".".join([cached_name, extention])
 
 class Table(BaseTableABC, metaclass=ABCMeta):
-    """MetaClass for importing data"""
+    """MetaClass for defining tables.
+        Attention! The following methods are required when defining a class the inherits from Table
+
+    Methods:
+        input(self): Should return the table.
+            For example pd.read_csv() **(required, method)**
+
+        output(self): Should return the output path for
+            where the finished table should be stored.
+            For example a cache directory. **(required, method)**
+
+        post_processors(self): a list of post processor
+            functions of methods. **(required, property)**
+
+    Example:
+        Defining a table::
+
+            class UserDataTable(Table):
+                def input(self):
+                    return pd.read_csv('/path/to/file')
+
+                def output(self):
+                    return "/path/to/output"
+
+                @property
+                def post_processors(self):
+                    return [
+                        my_custom_function(),
+                        my_second_custom_function(),
+                    ]
+
+    """
 
     def __init__(self, **kwargs):
         self.kwargs = kwargs or {}

@@ -21,12 +21,24 @@ class Tabs():
 
     Args:
         package_path (str): Path to package containing defined tables
+        custom_table_classes (list(class)): A list of custom Table metaclasses
+            that should also be recognised and added to the tabs list.
 
     Example:
-        from src.data.tabs import Tabs
-        tabs = Tabs()
-        tabs.table_list()
-        person_data = tabs('Persondata').fetch()
+        Using tabs for listing tables::
+
+            from src.data.tabs import Tabs
+            tabs = Tabs()
+            tabs.table_list()
+
+            > Avaiable tables:
+            > Persondata
+            > OtherData
+
+
+        Fetching a defined table::
+
+            person_data = tabs('Persondata').fetch()
     """
 
     def __init__(self, package_path=None, custom_table_classes=None):

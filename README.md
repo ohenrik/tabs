@@ -10,7 +10,7 @@ compiled once.
 
 ## Basic concepts
 
-Tabs consists of two main classes. Tables and Table.
+Tabs consists of two main classes. Tabs and Table.
 
 ### Table
 
