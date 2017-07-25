@@ -1,11 +1,5 @@
 # Tabs
 
-Tabs is a small framework created for organizing loading and processing
-tables.
-
-It's built to be used with Pandas but could be used with any library for loading
-and handling tables.
-
 Tabs is a small framework for defining and loading tables in a consistent way.
 The goal is to make data science projects more maintainable by
 improving code readbility.
