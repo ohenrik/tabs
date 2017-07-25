@@ -2,7 +2,7 @@
 
 Tabs is a Micro framework for defining and loading tables in a consistent way.
 The goal is to make data science projects more maintainable by
-improving code readbility.
+improving code readability.
 
 Tabs comes with support for caching processed tables based on the current
 configuration resulting in shorter loading of tables that have already been
