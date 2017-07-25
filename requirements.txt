@@ -1,0 +1,9 @@
+Sphinx==1.5.6
+coverage==4.4.1
+python-dotenv>=0.5.1
+pylint==1.7.1
+pytest==3.0.7
+pytest-xdist==1.16.0
+pytest-cov==2.5.1
+pandas>=0.20
+dill>=0.2
