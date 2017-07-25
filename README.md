@@ -1,10 +1,18 @@
-# tabs
+# Tabs
 
 Tabs is a small framework created for organizing loading and processing
 tables.
 
 It's built to be used with Pandas but could be used with any library for loading
 and handling tables.
+
+Tabs is a small framework for defining and loading tables in a consistent way.
+The goal is to make data science projects more maintainable by
+improving code readbility.
+
+Tabs comes with support for caching processed tables based on the current
+configuration resulting in shorter loading of tables that have already been
+compiled once.
 
 ## Basic concepts
 
@@ -16,9 +24,9 @@ Table is an abstract class used to define new tables. This ensures that all
 tables has a minimum of shared functionality, like fetching a table or
 describing it.
 
-### Tables
+### Tabs
 
-Tables is the class used to load all tables defined in a package. This is the
+Tabs is the class used to load all tables defined in a package. This is the
 class used for loading tables and gaining an overview of all tables defined in a
 package.
 
@@ -113,24 +121,25 @@ regenerated.
 input and returns a modified table. This is where you instruct what changes you
 apply to your table and in what order.
 
-### Tables
+### Tabs
 
 The Tables class can be used to load tables and getting an overview of which
 tables are defined and how they are processed.
 
 ```python
+from tabs import Tabs
 package_path = os.path.dirname(os.path.realpath(__file__))
-tables = Tables(package_path)
-table = tables('TestTableOne').fetch()
+tabs = Tabs(package_path)
+test_table_one = tabs('TestTableOne').fetch()
 
-len(table) # >>>> 100
-list(table) # >>>> ['first', 'last', 'birthday', 'age']
-table.head() # table is a normal pandas table
+len(test_table_one) # >>>> 100
+list(test_table_one) # >>>> ['first', 'last', 'birthday', 'age']
+test_table_one.head() # test_table_one is a normal pandas table
 
-tables.describe_all(full=True) # This will print a list of all defined tables and their post porcessors.
+tabs.describe_all(full=True) # This will print a list of all defined tables and their post porcessors.
 ```
 
-### Table and Tables - Utility methods
+### Table and Tabs - Utility methods
 
 #### describe
 
@@ -142,23 +151,23 @@ will also be included.
 **Example with TestTableOne:**
 `TestTableOne().describe(full=True)`
 
-**Example through Tables:**
-`Tables(package_path)('TestTableOne').describe(full=True)`
+**Example through Tabs:**
+`Tabs(package_path)('TestTableOne').describe(full=True)`
 
 #### describe_all
 
-Does the same as `describe` but for all defined tables. Only exists on Tables.
+Does the same as `describe` but for all defined tables. Only exists on Tabs.
 
 #### fetch
 
-Is either used directly on defined tables (i.e. TestTableOne) or through Tables
+Is either used directly on defined tables (i.e. TestTableOne) or through Tabs
 and is used to fetch the pandas table from the a defined table.
 
 **Example with TestTableOne:**
 `TestTableOne().fetch()`
 
-**Example through Tables:**
-`Tables(package_path)('TestTableOne').fetch()`
+**Example through Tabs:**
+`Tabs(package_path)('TestTableOne').fetch()`
 
 #### get_cached_filename
 
