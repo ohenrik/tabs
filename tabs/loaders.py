@@ -99,7 +99,9 @@ class BaseTableABC(metaclass=ABCMeta):
 
 class Table(BaseTableABC, metaclass=ABCMeta):
     """MetaClass for defining tables.
-        Attention! The following methods are required when defining a class the inherits from Table
+
+    Attention! The following methods are required when defining a
+    class the inherits from Table
 
     Methods:
         input(self): Should return the table.
