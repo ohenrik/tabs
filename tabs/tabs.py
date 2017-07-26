@@ -27,8 +27,9 @@ class Tabs():
     Example:
         Using tabs for listing tables::
 
-            from src.data.tabs import Tabs
-            tabs = Tabs()
+            from tabs import Tabs
+            package_path = os.path.dirname(os.path.realpath(__file__))
+            tabs = Tabs(package_path)
             tabs.table_list()
 
             > Avaiable tables:
