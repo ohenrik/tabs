@@ -6,7 +6,10 @@ improving code readability.
 
 Tabs comes with support for caching processed tables based on the current
 configuration resulting in shorter loading of tables that have already been
-compiled once."""
+compiled once.
+
+Link to full documentation: http://tabs.readthedocs.io/en/latest/index.html
+"""
 from setuptools import setup
 
 setup(name='tabs',
