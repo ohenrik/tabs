@@ -29,4 +29,5 @@ Indices and tables
     :caption: Table of Contents
 
     basic_concepts
-    quick_start
+    usage
+    source/modules
