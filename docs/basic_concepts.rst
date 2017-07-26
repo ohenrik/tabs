@@ -5,8 +5,6 @@ Tabs consists of two main classes.
   * Tabs
   * Table
 
-But the usage section provides a better introduction to these classes.
-
 Table
 -----
 
