@@ -1,6 +1,4 @@
 # pylint: disable=C0111,C0103
-import os
-import pytest
 from tests.fixtures import example_table
 
 def test_table_dependencies():
