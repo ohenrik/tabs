@@ -3,7 +3,7 @@ import sys
 import pkgutil
 import importlib
 from inspect import getmembers, isclass, isabstract
-from tabs.loaders import Table
+from tabs.tables import Table
 
 def get_all_modules(package_path):
     """Load all modules in a package"""

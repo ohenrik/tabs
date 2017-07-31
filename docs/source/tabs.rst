@@ -4,10 +4,10 @@ tabs package
 Submodules
 ----------
 
-tabs\.loaders module
+tabs\.tables module
 --------------------
 
-.. automodule:: tabs.loaders
+.. automodule:: tabs.tables
     :members:
     :undoc-members:
     :show-inheritance:

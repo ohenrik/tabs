@@ -13,7 +13,7 @@ def post_process(table, post_processors):
 
 def describe(table_class, full=False):
     """Prints a description of the table based on the provided
-        documentation and post processors"""
+    documentation and post processors"""
     divider_double = "=" * 80
     divider_single = "-" * 80
     description = table_class.__doc__
@@ -43,6 +43,7 @@ class BaseTableABC(metaclass=ABCMeta):
     def input(self):
         """Path to the original raw data"""
         pass
+    input.dependencies = list()
 
     @abstractmethod
     def output(self):
@@ -75,6 +76,29 @@ class BaseTableABC(metaclass=ABCMeta):
             full (bool): Include post processors in the printed description.
         """
         return describe(self, full)
+
+    def dependencies(self):
+        """Returns a list of all dependent tables,
+        in the order they are defined.
+
+        Add new dependencies for input and every post proecssor like this::
+
+            input.dependencies = [PersonalData]
+            some_post_processor.dependencies = [SomeOtherTable, AnotherTable]
+
+        `some_post_processor.dependencies` needs to be placed after
+        `some_post_processor` is defined.
+        """
+        dependencies = []
+        dependencies += self.input.dependencies
+        for processor in self.post_processors:
+            try:
+                assert isinstance(processor.dependencies, list), \
+                    "{}.dependencies must be a list".format(processor.__name__)
+                dependencies += processor.dependencies
+            except AttributeError:
+                pass
+        return dependencies
 
     @abstractmethod
     def get_settings_list(self):

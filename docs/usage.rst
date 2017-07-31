@@ -21,7 +21,7 @@ Defining a table::
 
   import os
   from datetime import datetime
-  from tabs.loaders import Table
+  from tabs import Table
   from dateutil.relativedelta import relativedelta
   import pandas as pd
   import numpy as np

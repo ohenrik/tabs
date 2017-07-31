@@ -1,7 +1,8 @@
+# pylint: disable=C0111,C0103,R0201
 import os
 import tempfile
 from datetime import datetime
-from tabs.loaders import Table
+from tabs import Table
 from dateutil.relativedelta import relativedelta
 import pandas as pd
 import numpy as np
@@ -55,21 +56,8 @@ class TestTableOne(Table):
 class TestTableTwo(Table):
     """Class for testing tables loader"""
     def input(self):
-        input_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                  'data',
-                                  'test_table_one.csv')
-        dtype = {
-            'first': np.str,
-            'last': np.str,
-            # 'birthday': np.str
-            'age': np.int
-        }
-
-        converters = {
-            'birthday': pd.to_datetime,
-        }
-
-        return pd.read_csv(input_file, dtype=dtype, converters=converters)
+        return TestTableOne.fetch()
+    input.dependencies = [TestTableOne]
 
     def output(self):
         output_path = os.path.join(tempfile.mkdtemp(),
@@ -78,6 +66,12 @@ class TestTableTwo(Table):
                                   )
         return output_path
 
+    def something_does_nothing(self, table):
+        return table
+    something_does_nothing.dependencies = [TestTableOne]
+
     @property
     def post_processors(self):
-        return list()
+        return [
+            self.something_does_nothing
+        ]
