@@ -40,10 +40,10 @@ class BaseTableABC(metaclass=ABCMeta):
     """Abstract Base class for minimum table import"""
 
     @abstractmethod
-    def input(self):
+    def source(self):
         """Path to the original raw data"""
         pass
-    input.dependencies = list()
+    source.dependencies = list()
 
     @abstractmethod
     def output(self):
@@ -81,16 +81,16 @@ class BaseTableABC(metaclass=ABCMeta):
         """Returns a list of all dependent tables,
         in the order they are defined.
 
-        Add new dependencies for input and every post proecssor like this::
+        Add new dependencies for source and every post proecssor like this::
 
-            input.dependencies = [PersonalData]
+            source.dependencies = [PersonalData]
             some_post_processor.dependencies = [SomeOtherTable, AnotherTable]
 
         `some_post_processor.dependencies` needs to be placed after
         `some_post_processor` is defined.
         """
         dependencies = []
-        dependencies += self.input.dependencies
+        dependencies += self.source.dependencies
         for processor in self.post_processors:
             try:
                 assert isinstance(processor.dependencies, list), \
@@ -128,7 +128,7 @@ class Table(BaseTableABC, metaclass=ABCMeta):
     class the inherits from Table
 
     Methods:
-        input(self): Should return the table.
+        source(self): Should return the table.
             For example pd.read_csv() **(required, method)**
 
         output(self): Should return the output path for
@@ -142,7 +142,7 @@ class Table(BaseTableABC, metaclass=ABCMeta):
         Defining a table::
 
             class UserDataTable(Table):
-                def input(self):
+                def source(self):
                     return pd.read_csv('/path/to/file')
 
                 def output(self):
@@ -161,7 +161,7 @@ class Table(BaseTableABC, metaclass=ABCMeta):
         self.kwargs = kwargs or {}
 
     @abstractmethod
-    def input(self):
+    def source(self):
         """Path to the original raw data"""
         pass
 
@@ -179,7 +179,7 @@ class Table(BaseTableABC, metaclass=ABCMeta):
     def get_settings_list(self):
         """The settings list used for building the cache id."""
         return [
-            self.input,
+            self.source,
             self.output,
             self.post_processors
         ]
@@ -195,7 +195,7 @@ class Table(BaseTableABC, metaclass=ABCMeta):
 
     def _process_table(self, cache=True):
         """Applies the post processors"""
-        table = self.input()
+        table = self.source()
         table = post_process(table, self.post_processors)
         if cache:
             self.to_cache(table)

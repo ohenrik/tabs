@@ -23,10 +23,10 @@ def calculate_new_age(table):
 
 class TestTableOne(Table):
     """Class for testing table loader"""
-    def input(self):
-        input_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                  'data',
-                                  'test_table_one.csv')
+    def source(self):
+        source_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                                   'data',
+                                   'test_table_one.csv')
         dtype = {
             'first': np.str,
             'last': np.str,
@@ -38,11 +38,12 @@ class TestTableOne(Table):
             'birthday': pd.to_datetime,
         }
 
-        return pd.read_csv(input_file, dtype=dtype, converters=converters)
+        return pd.read_csv(source_file, dtype=dtype, converters=converters)
 
     def output(self):
         output_path = os.path.join(tempfile.mkdtemp(),
-                                   self.get_cached_filename('test_table_one', 'pkl')
+                                   self.get_cached_filename('test_table_one',
+                                                            'pkl')
                                   )
         return output_path
 
@@ -55,9 +56,9 @@ class TestTableOne(Table):
 
 class TestTableTwo(Table):
     """Class for testing tables loader"""
-    def input(self):
+    def source(self):
         return TestTableOne.fetch()
-    input.dependencies = [TestTableOne]
+    source.dependencies = [TestTableOne]
 
     def output(self):
         output_path = os.path.join(tempfile.mkdtemp(),

@@ -42,10 +42,10 @@ Defining a table::
 
   class TestTableOne(Table):
       """Table containing names, birthday and age of participants"""
-      def input(self):
-          input_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                    'csv_files',
-                                    'test_table_one.csv')
+      def source(self):
+          source_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                                     'csv_files',
+                                     'test_table_one.csv')
           dtype = {
               'first': np.str,
               'last': np.str,
@@ -56,7 +56,7 @@ Defining a table::
               'birthday': pd.to_datetime,
           }
 
-          return pd.read_csv(input_file, dtype=dtype, converters=converters)
+          return pd.read_csv(source_file, dtype=dtype, converters=converters)
 
       def output(self):
           output_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),
@@ -73,28 +73,28 @@ Defining a table::
           ]
 
 
-Here you should first pay attention to the class :code:`TestTableOne`. This inherits
-from the abstract class :code:`Table` that requires :code:`input`, :code:`output` and
-:code:`post_processors` to be defined.
+Here you should first pay attention to the class :code:`TestTableOne`. This
+inherits from the abstract class :code:`Table` that requires :code:`source`,
+:code:`output` and :code:`post_processors` to be defined.
 
-:code:`input` is used to define how the table is loaded before any post processors are
-applied.
+:code:`source` is used to define how the table is loaded before any post
+processors are applied.
 
 :code:`output` specifies where the table is stored and if it utilizes the
-:code:`get_cached_filename` method that applies a hash id based on  the content of
-:code:`input`, `output` and `post_processors`. This ensures that if the table is
-modified either through input, output or post processors, the table is
+:code:`get_cached_filename` method that applies a hash id based on  the content
+of :code:`source`, `output` and `post_processors`. This ensures that if the table
+is modified either through source, output or post processors, the table is
 regenerated.
 
-:code:`post_processors` is an array of functions that takes the complete table as an
-input and returns a modified table. This is where you instruct what changes you
-apply to your table and in what order.
+:code:`post_processors` is an array of functions that takes the complete table
+as an source and returns a modified table. This is where you instruct what
+changes you apply to your table and in what order.
 
 Tabs
 ----
 
-The :class:`Tabs` class can be used to load tables and getting an overview of which
-tables are defined and how they are processed::
+The :class:`Tabs` class can be used to load tables and getting an overview of
+which tables are defined and how they are processed::
 
   # in /table_usage.py
   from tabs import Tabs
