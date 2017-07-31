@@ -33,7 +33,6 @@ def describe(cls, full=False):
     message.append('')
     for line in message:
         print(line)
-    return message
 
 
 class BaseTableABC(metaclass=ABCMeta):

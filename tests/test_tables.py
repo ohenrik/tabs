@@ -13,19 +13,23 @@ def test_table_dependencies_length():
 def test_table_dep_alias_length():
     assert len(example_table.TestTableTwo().dep()) == 2
 
-def test_table_one_prints_description():
-    result = example_table.TestTableOne.describe()
-    assert result == [
+def test_table_one_prints_description(capfd):
+    example_table.TestTableOne.describe()
+    out, _ = capfd.readouterr()
+    result = "\n".join([
         '================================================================================',
         'TestTableOne:',
         'Class for testing table loader',
         '================================================================================',
+        '',
         ''
-    ]
+    ])
+    assert result == out
 
-def test_table_one_prints_full_description():
+def test_table_one_prints_full_description(capfd):
     result = example_table.TestTableOne.describe(full=True)
-    assert result == [
+    out, _ = capfd.readouterr()
+    result = "\n".join([
         '================================================================================',
         'TestTableOne:',
         'Class for testing table loader',
@@ -39,5 +43,7 @@ def test_table_one_prints_full_description():
         '    Calculates new age and adds it to the dataframe',
         '',
         '================================================================================',
+        '',
         ''
-    ]
+    ])
+    assert result == out

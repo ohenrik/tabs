@@ -22,12 +22,13 @@ def test_tabs_finds_two_tables():
     assert len(tabs.tabs) == 2
 
 
-def test_table_one_has_description():
+def test_table_one_has_description(capfd):
     package_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                                 'fixtures')
     tabs = Tabs(package_path)
-    result = tabs('TestTableOne').describe(full=True)
-    assert result == [
+    tabs('TestTableOne').describe(full=True)
+    out, _ = capfd.readouterr()
+    result = "\n".join([
         '================================================================================',
         'TestTableOne:',
         'Class for testing table loader',
@@ -41,8 +42,10 @@ def test_table_one_has_description():
         '    Calculates new age and adds it to the dataframe',
         '',
         '================================================================================',
+        '',
         ''
-    ]
+    ])
+    assert result == out
 
 def test_tabs_loads_test_table_one():
     package_path = os.path.join(os.path.dirname(os.path.realpath(__file__)),
