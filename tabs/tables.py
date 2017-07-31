@@ -11,21 +11,21 @@ def post_process(table, post_processors):
         table_result = processor(table_result)
     return table_result
 
-def describe(table_class, full=False):
+def describe(cls, full=False):
     """Prints a description of the table based on the provided
     documentation and post processors"""
     divider_double = "=" * 80
     divider_single = "-" * 80
-    description = table_class.__doc__
+    description = cls.__doc__
     message = []
     message.append(divider_double)
-    message.append(table_class.__class__.__name__ + ':')
+    message.append(cls.__name__ + ':')
     message.append(description)
-    if full and table_class.post_processors:
+    if full and cls.post_processors(cls):
         message.append(divider_single)
         message.append("Post processors:")
         message.append(divider_single)
-        for processor in table_class.post_processors:
+        for processor in cls.post_processors(cls):
             message.append(">" + " " * 3 + processor.__name__ + ':')
             message.append(" " * 4 + processor.__doc__)
             message.append('')
@@ -55,29 +55,31 @@ class BaseTableABC(metaclass=ABCMeta):
         """Method for fetching data"""
         pass
 
-    @property
     @abstractmethod
     def post_processors(self):
         """A list of functions to be applied for post processing"""
         return list()
 
-    def describe_processors(self):
+    @classmethod
+    def describe_processors(cls):
         """List all postprocessors and their description"""
-        for processor in self.post_processors:
+        for processor in cls.post_processors(cls):
             yield {'name': processor.__name__,
                    'description': processor.__doc__,
                    'processor': processor}
 
-    def describe(self, full=False):
+    @classmethod
+    def describe(cls, full=False):
         """Prints a description of the table based on the provided
             documentation and post processors.
 
         Args:
             full (bool): Include post processors in the printed description.
         """
-        return describe(self, full)
+        return describe(cls, full)
 
-    def dependencies(self):
+    @classmethod
+    def dependencies(cls):
         """Returns a list of all dependent tables,
         in the order they are defined.
 
@@ -90,8 +92,8 @@ class BaseTableABC(metaclass=ABCMeta):
         `some_post_processor` is defined.
         """
         dependencies = []
-        dependencies += self.source.dependencies
-        for processor in self.post_processors:
+        dependencies += cls.source.dependencies
+        for processor in cls.post_processors(cls):
             try:
                 assert isinstance(processor.dependencies, list), \
                     "{}.dependencies must be a list".format(processor.__name__)
@@ -136,7 +138,7 @@ class Table(BaseTableABC, metaclass=ABCMeta):
             For example a cache directory. **(required, method)**
 
         post_processors(self): a list of post processor
-            functions of methods. **(required, property)**
+            functions of methods. **(required, method)**
 
     Example:
         Defining a table::
@@ -148,7 +150,6 @@ class Table(BaseTableABC, metaclass=ABCMeta):
                 def output(self):
                     return "/path/to/output"
 
-                @property
                 def post_processors(self):
                     return [
                         my_custom_function(),
@@ -170,7 +171,6 @@ class Table(BaseTableABC, metaclass=ABCMeta):
         """Path to the processed table (output path)"""
         pass
 
-    @property
     @abstractmethod
     def post_processors(self):
         """A list of functions to be applied for post processing"""
@@ -196,7 +196,7 @@ class Table(BaseTableABC, metaclass=ABCMeta):
     def _process_table(self, cache=True):
         """Applies the post processors"""
         table = self.source()
-        table = post_process(table, self.post_processors)
+        table = post_process(table, self.post_processors())
         if cache:
             self.to_cache(table)
         return table

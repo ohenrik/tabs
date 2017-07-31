@@ -65,7 +65,6 @@ Defining a table::
                                     )
           return output_path
 
-      @property
       def post_processors(self):
           return [
               drop_age_column,
@@ -122,7 +121,7 @@ the class. If `full=True` is provided the post processors and their description
 will also be included.
 
 **Example with TestTableOne:**
-:code:`TestTableOne().describe(full=True)`
+:code:`TestTableOne.describe(full=True)`
 
 **Example through Tabs:**
 :code:`Tabs(package_path)('TestTableOne').describe(full=True)`

@@ -47,7 +47,6 @@ class TestTableOne(Table):
                                   )
         return output_path
 
-    @property
     def post_processors(self):
         return [
             drop_age_column,
@@ -71,7 +70,6 @@ class TestTableTwo(Table):
         return table
     something_does_nothing.dependencies = [TestTableOne]
 
-    @property
     def post_processors(self):
         return [
             self.something_does_nothing
