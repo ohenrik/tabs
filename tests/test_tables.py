@@ -4,8 +4,14 @@ from tests.fixtures import example_table
 def test_table_dependencies():
     assert example_table.TestTableOne in example_table.TestTableTwo.dependencies()
 
+def test_table_dep_alias():
+    assert example_table.TestTableOne in example_table.TestTableTwo.dep()
+
 def test_table_dependencies_length():
     assert len(example_table.TestTableTwo().dependencies()) == 2
+
+def test_table_dep_alias_length():
+    assert len(example_table.TestTableTwo().dep()) == 2
 
 def test_table_one_prints_description():
     result = example_table.TestTableOne.describe()

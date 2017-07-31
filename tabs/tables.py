@@ -102,6 +102,11 @@ class BaseTableABC(metaclass=ABCMeta):
                 pass
         return dependencies
 
+    dep = dependencies
+    """dep is an alias of dependencies"""
+
+    # TODO: Make dependent columns method for use in tests.
+
     @abstractmethod
     def get_settings_list(self):
         """Method for getting the settings list"""
