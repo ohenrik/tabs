@@ -62,6 +62,7 @@ class BaseTableABC(metaclass=ABCMeta):
     @classmethod
     def describe_processors(cls):
         """List all postprocessors and their description"""
+        # TODO: Add dependencies to this dictionary
         for processor in cls.post_processors(cls):
             yield {'name': processor.__name__,
                    'description': processor.__doc__,
@@ -124,6 +125,7 @@ class BaseTableABC(metaclass=ABCMeta):
                 NB! The dictionaries have to be sorted or hash id will change
                 arbitrarely.
         """
+        # TODO: Add md5 hash from dependencies and add them to this md5 hash, to ensure that this table is regenerated.
         settings = settings_list or self.get_settings_list()
         settings_str = pickle.dumps(settings)
         cache_id = hashlib.md5(settings_str).hexdigest()
@@ -210,7 +212,7 @@ class Table(BaseTableABC, metaclass=ABCMeta):
             self.to_cache(table)
         return table
 
-    # TODO: Check upstream if a table needs to be rerun.
+    # TODO: Check upstream if a table needs to be rerun (will be fixed based on hash included in settings for dependent variables)
 
     def fetch(self, rebuild=False, cache=True):
         """Fetches the table and applies all post processors.

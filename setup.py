@@ -13,7 +13,7 @@ Link to full documentation: http://tabs.readthedocs.io/en/latest/index.html
 from setuptools import setup
 
 setup(name='tabs',
-      version='0.6.4',
+      version='0.6.5',
       url='https://github.com/ohenrik/tabs',
       description="""Tabs - Import tables in a consistent, maintainable, and readable way""",
       long_description=__doc__,
@@ -21,7 +21,7 @@ setup(name='tabs',
       author_email='ole@amplify.no',
       packages=['tabs'],
       install_requires=[
-          'pandas>=0.20'
+          'pandas>=0.20',
           'dill>=0.2'
       ],
       classifiers=[
