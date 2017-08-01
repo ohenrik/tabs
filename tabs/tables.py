@@ -91,7 +91,10 @@ class BaseTableABC(metaclass=ABCMeta):
         `some_post_processor` is defined.
         """
         dependencies = []
-        dependencies += cls.source.dependencies
+        try:
+            dependencies += cls.source.dependencies
+        except AttributeError:
+            pass
         for processor in cls.post_processors(cls):
             try:
                 assert isinstance(processor.dependencies, list), \
@@ -206,6 +209,8 @@ class Table(BaseTableABC, metaclass=ABCMeta):
         if cache:
             self.to_cache(table)
         return table
+
+    # TODO: Check upstream if a table needs to be rerun.
 
     def fetch(self, rebuild=False, cache=True):
         """Fetches the table and applies all post processors.

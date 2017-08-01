@@ -4,6 +4,9 @@ from tests.fixtures import example_table
 def test_table_dependencies():
     assert example_table.TestTableOne in example_table.TestTableTwo.dependencies()
 
+def test_table_dependencies_without_any_dep():
+    assert example_table.TestTableOne.dependencies() == list()
+
 def test_table_dep_alias():
     assert example_table.TestTableOne in example_table.TestTableTwo.dep()
 
