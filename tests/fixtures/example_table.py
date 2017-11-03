@@ -55,9 +55,10 @@ class TestTableOne(Table):
 
 class TestTableTwo(Table):
     """Class for testing tables loader"""
+
     def source(self):
         return TestTableOne.fetch()
-    source.dependencies = [TestTableOne]
+    source.dependencies = [TestTableOne()]
 
     def output(self):
         output_path = os.path.join(tempfile.mkdtemp(),
@@ -68,7 +69,7 @@ class TestTableTwo(Table):
 
     def something_does_nothing(self, table):
         return table
-    something_does_nothing.dependencies = [TestTableOne]
+    something_does_nothing.dependencies = [TestTableOne()]
 
     def post_processors(self):
         return [

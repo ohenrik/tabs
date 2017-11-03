@@ -1,4 +1,5 @@
 """Table base classes for defning new tables"""
+import inspect
 from abc import ABCMeta, abstractmethod
 import hashlib
 import dill as pickle
@@ -37,6 +38,10 @@ def describe(cls, full=False):
 
 class BaseTableABC(metaclass=ABCMeta):
     """Abstract Base class for minimum table import"""
+
+    def __init__(self, *args, **kwargs):
+        self.args = args
+        self.kwargs = kwargs
 
     @abstractmethod
     def source(self):
@@ -107,13 +112,26 @@ class BaseTableABC(metaclass=ABCMeta):
 
     dep = dependencies
     """dep is an alias of dependencies"""
-
     # TODO: Make dependent columns method for use in tests.
 
-    @abstractmethod
     def get_settings_list(self):
-        """Method for getting the settings list"""
-        pass
+        """The settings list used for building the cache id."""
+        return [
+            self.source,
+            self.output,
+            self.kwargs,
+            self.post_processors,
+        ]
+
+    def get_hash(self):
+        """Retruns a hash based on the the current table code and kwargs.
+        Also changes based on dependent tables."""
+        depencency_hashes = [dep.get_hash() for dep in self.dep()]
+        sl = inspect.getsourcelines
+        hash_sources = [sl(self.__class__), self.args,
+                        self.kwargs, *depencency_hashes]
+        hash_input = pickle.dumps(hash_sources)
+        return hashlib.md5(hash_input).hexdigest()
 
     def get_cached_filename(self, filename, extention, settings_list=None):
         """Creates a filename with md5 cache string based on settings list
@@ -125,11 +143,7 @@ class BaseTableABC(metaclass=ABCMeta):
                 NB! The dictionaries have to be sorted or hash id will change
                 arbitrarely.
         """
-        # TODO: Add md5 hash from dependencies and add them to this md5 hash, to ensure that this table is regenerated.
-        settings = settings_list or self.get_settings_list()
-        settings_str = pickle.dumps(settings)
-        cache_id = hashlib.md5(settings_str).hexdigest()
-        cached_name = "_".join([filename, cache_id])
+        cached_name = "_".join([filename, self.get_hash()])
         return ".".join([cached_name, extention])
 
 class Table(BaseTableABC, metaclass=ABCMeta):
@@ -167,8 +181,8 @@ class Table(BaseTableABC, metaclass=ABCMeta):
 
     """
 
-    def __init__(self, **kwargs):
-        self.kwargs = kwargs or {}
+    def __init__(self, *args, **kwargs):
+        super(Table, self).__init__(*args, **kwargs)
 
     @abstractmethod
     def source(self):
@@ -184,14 +198,6 @@ class Table(BaseTableABC, metaclass=ABCMeta):
     def post_processors(self):
         """A list of functions to be applied for post processing"""
         return list()
-
-    def get_settings_list(self):
-        """The settings list used for building the cache id."""
-        return [
-            self.source,
-            self.output,
-            self.post_processors
-        ]
 
     def to_cache(self, table):
         """Defines the default cache method. Can be overwritten if needed"""

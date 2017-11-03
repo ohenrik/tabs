@@ -31,3 +31,8 @@ package.
 
 [The usage section of the documentation provides a better introduction
 to these classes.](http://tabs.readthedocs.io/en/latest/usage.html)
+
+## Later inspiration
+
+http://luigi.readthedocs.io/en/stable/execution_model.html
+http://pythonhosted.org/airflow/tutorial.html#importing-modules
